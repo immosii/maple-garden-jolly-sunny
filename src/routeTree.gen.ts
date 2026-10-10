@@ -10,154 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ActionsRouteImport } from './routes/actions'
-import { Route as CausesRouteImport } from './routes/causes'
-import { Route as CohortsRouteImport } from './routes/cohorts'
-import { Route as DataRouteImport } from './routes/data'
-import { Route as DevicesRouteImport } from './routes/devices'
-import { Route as LifetimeRouteImport } from './routes/lifetime'
-import { Route as PartsRouteImport } from './routes/parts'
-import { Route as RepeatsRouteImport } from './routes/repeats'
-import { Route as ReportRouteImport } from './routes/report'
+import { Route as FamiliesRouteImport } from './routes/families'
+import { Route as GuideRouteImport } from './routes/guide'
+import { Route as MatrixRouteImport } from './routes/matrix'
+import { Route as ModelsRouteImport } from './routes/models'
+import { Route as MonthsRouteImport } from './routes/months'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as RecordsRouteImport } from './routes/records'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ActionsRoute = ActionsRouteImport.update({
-  id: '/actions',
-  path: '/actions',
+const FamiliesRoute = FamiliesRouteImport.update({
+  id: '/families',
+  path: '/families',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CausesRoute = CausesRouteImport.update({
-  id: '/causes',
-  path: '/causes',
+const GuideRoute = GuideRouteImport.update({
+  id: '/guide',
+  path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CohortsRoute = CohortsRouteImport.update({
-  id: '/cohorts',
-  path: '/cohorts',
+const MatrixRoute = MatrixRouteImport.update({
+  id: '/matrix',
+  path: '/matrix',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DataRoute = DataRouteImport.update({
-  id: '/data',
-  path: '/data',
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevicesRoute = DevicesRouteImport.update({
-  id: '/devices',
-  path: '/devices',
+const MonthsRoute = MonthsRouteImport.update({
+  id: '/months',
+  path: '/months',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LifetimeRoute = LifetimeRouteImport.update({
-  id: '/lifetime',
-  path: '/lifetime',
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PartsRoute = PartsRouteImport.update({
-  id: '/parts',
-  path: '/parts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RepeatsRoute = RepeatsRouteImport.update({
-  id: '/repeats',
-  path: '/repeats',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportRoute = ReportRouteImport.update({
-  id: '/report',
-  path: '/report',
+const RecordsRoute = RecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/actions': typeof ActionsRoute
-  '/causes': typeof CausesRoute
-  '/cohorts': typeof CohortsRoute
-  '/data': typeof DataRoute
-  '/devices': typeof DevicesRoute
-  '/lifetime': typeof LifetimeRoute
-  '/parts': typeof PartsRoute
-  '/repeats': typeof RepeatsRoute
-  '/report': typeof ReportRoute
+  '/families': typeof FamiliesRoute
+  '/guide': typeof GuideRoute
+  '/matrix': typeof MatrixRoute
+  '/models': typeof ModelsRoute
+  '/months': typeof MonthsRoute
+  '/orders': typeof OrdersRoute
+  '/records': typeof RecordsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/actions': typeof ActionsRoute
-  '/causes': typeof CausesRoute
-  '/cohorts': typeof CohortsRoute
-  '/data': typeof DataRoute
-  '/devices': typeof DevicesRoute
-  '/lifetime': typeof LifetimeRoute
-  '/parts': typeof PartsRoute
-  '/repeats': typeof RepeatsRoute
-  '/report': typeof ReportRoute
+  '/families': typeof FamiliesRoute
+  '/guide': typeof GuideRoute
+  '/matrix': typeof MatrixRoute
+  '/models': typeof ModelsRoute
+  '/months': typeof MonthsRoute
+  '/orders': typeof OrdersRoute
+  '/records': typeof RecordsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/actions': typeof ActionsRoute
-  '/causes': typeof CausesRoute
-  '/cohorts': typeof CohortsRoute
-  '/data': typeof DataRoute
-  '/devices': typeof DevicesRoute
-  '/lifetime': typeof LifetimeRoute
-  '/parts': typeof PartsRoute
-  '/repeats': typeof RepeatsRoute
-  '/report': typeof ReportRoute
+  '/families': typeof FamiliesRoute
+  '/guide': typeof GuideRoute
+  '/matrix': typeof MatrixRoute
+  '/models': typeof ModelsRoute
+  '/months': typeof MonthsRoute
+  '/orders': typeof OrdersRoute
+  '/records': typeof RecordsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/actions'
-    | '/causes'
-    | '/cohorts'
-    | '/data'
-    | '/devices'
-    | '/lifetime'
-    | '/parts'
-    | '/repeats'
-    | '/report'
+    | '/families'
+    | '/guide'
+    | '/matrix'
+    | '/models'
+    | '/months'
+    | '/orders'
+    | '/records'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/actions'
-    | '/causes'
-    | '/cohorts'
-    | '/data'
-    | '/devices'
-    | '/lifetime'
-    | '/parts'
-    | '/repeats'
-    | '/report'
+    | '/families'
+    | '/guide'
+    | '/matrix'
+    | '/models'
+    | '/months'
+    | '/orders'
+    | '/records'
   id:
     | '__root__'
     | '/'
-    | '/actions'
-    | '/causes'
-    | '/cohorts'
-    | '/data'
-    | '/devices'
-    | '/lifetime'
-    | '/parts'
-    | '/repeats'
-    | '/report'
+    | '/families'
+    | '/guide'
+    | '/matrix'
+    | '/models'
+    | '/months'
+    | '/orders'
+    | '/records'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ActionsRoute: typeof ActionsRoute
-  CausesRoute: typeof CausesRoute
-  CohortsRoute: typeof CohortsRoute
-  DataRoute: typeof DataRoute
-  DevicesRoute: typeof DevicesRoute
-  LifetimeRoute: typeof LifetimeRoute
-  PartsRoute: typeof PartsRoute
-  RepeatsRoute: typeof RepeatsRoute
-  ReportRoute: typeof ReportRoute
+  FamiliesRoute: typeof FamiliesRoute
+  GuideRoute: typeof GuideRoute
+  MatrixRoute: typeof MatrixRoute
+  ModelsRoute: typeof ModelsRoute
+  MonthsRoute: typeof MonthsRoute
+  OrdersRoute: typeof OrdersRoute
+  RecordsRoute: typeof RecordsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -169,67 +143,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/actions': {
-      id: '/actions'
-      path: '/actions'
-      fullPath: '/actions'
-      preLoaderRoute: typeof ActionsRouteImport
+    '/families': {
+      id: '/families'
+      path: '/families'
+      fullPath: '/families'
+      preLoaderRoute: typeof FamiliesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/causes': {
-      id: '/causes'
-      path: '/causes'
-      fullPath: '/causes'
-      preLoaderRoute: typeof CausesRouteImport
+    '/guide': {
+      id: '/guide'
+      path: '/guide'
+      fullPath: '/guide'
+      preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cohorts': {
-      id: '/cohorts'
-      path: '/cohorts'
-      fullPath: '/cohorts'
-      preLoaderRoute: typeof CohortsRouteImport
+    '/matrix': {
+      id: '/matrix'
+      path: '/matrix'
+      fullPath: '/matrix'
+      preLoaderRoute: typeof MatrixRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/data': {
-      id: '/data'
-      path: '/data'
-      fullPath: '/data'
-      preLoaderRoute: typeof DataRouteImport
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/devices': {
-      id: '/devices'
-      path: '/devices'
-      fullPath: '/devices'
-      preLoaderRoute: typeof DevicesRouteImport
+    '/months': {
+      id: '/months'
+      path: '/months'
+      fullPath: '/months'
+      preLoaderRoute: typeof MonthsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lifetime': {
-      id: '/lifetime'
-      path: '/lifetime'
-      fullPath: '/lifetime'
-      preLoaderRoute: typeof LifetimeRouteImport
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/parts': {
-      id: '/parts'
-      path: '/parts'
-      fullPath: '/parts'
-      preLoaderRoute: typeof PartsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/repeats': {
-      id: '/repeats'
-      path: '/repeats'
-      fullPath: '/repeats'
-      preLoaderRoute: typeof RepeatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/report': {
-      id: '/report'
-      path: '/report'
-      fullPath: '/report'
-      preLoaderRoute: typeof ReportRouteImport
+    '/records': {
+      id: '/records'
+      path: '/records'
+      fullPath: '/records'
+      preLoaderRoute: typeof RecordsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -237,15 +197,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ActionsRoute: ActionsRoute,
-  CausesRoute: CausesRoute,
-  CohortsRoute: CohortsRoute,
-  DataRoute: DataRoute,
-  DevicesRoute: DevicesRoute,
-  LifetimeRoute: LifetimeRoute,
-  PartsRoute: PartsRoute,
-  RepeatsRoute: RepeatsRoute,
-  ReportRoute: ReportRoute,
+  FamiliesRoute: FamiliesRoute,
+  GuideRoute: GuideRoute,
+  MatrixRoute: MatrixRoute,
+  ModelsRoute: ModelsRoute,
+  MonthsRoute: MonthsRoute,
+  OrdersRoute: OrdersRoute,
+  RecordsRoute: RecordsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

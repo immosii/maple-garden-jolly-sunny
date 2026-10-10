@@ -1,148 +1,68 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ClientChart } from "@/components/charts/client-chart";
 import { CHART, tooltipStyle } from "@/components/charts/theme";
 import { KpiCard } from "@/components/kpi-card";
-import { MonthRail } from "@/components/month-rail";
 import { PageHeader } from "@/components/page-header";
-import { RankTable } from "@/components/rank-table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardHint, CardTitle } from "@/components/ui/card";
-import {
-  buildInsights,
-  computeKpis,
-  groupBy,
-  monthlySeries,
-  monthsOf,
-} from "@/lib/analytics";
-import { COMPANY } from "@/lib/company";
-import { faNum, formatPctPlain } from "@/lib/format";
-import { formatMonth, formatMonthShort } from "@/lib/jalali";
-import { compareMonthOf } from "@/lib/store";
-import { ALL_MONTHS } from "@/lib/types";
-import { useView } from "@/lib/use-view";
+import { faNum, formatRate } from "@/lib/format";
+import { GRADE } from "@/lib/grade";
 
 export const Route = createFileRoute("/")({ component: Home });
 
+function num(v: string | number) {
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n)) return String(v);
+  if (n > 0 && n < 1) return formatRate(n);
+  return faNum(n, 0);
+}
+
 function Home() {
-  const { filtered, rows, month, setMonth } = useView();
-  const months = monthsOf(filtered);
-  const k = computeKpis(filtered, month, compareMonthOf(month));
-  const insights = buildInsights(rows);
-  const series = monthlySeries(filtered);
-  const products = groupBy(rows, (r) => r.product);
-  const causes = groupBy(rows, (r) => r.cause).slice(0, 8);
-  const topProduct = products[0];
-  const topCause = causes[0];
-  const showDelta = month !== ALL_MONTHS;
+  const byLabel = Object.fromEntries(GRADE.summary.map((s) => [s.label, s]));
+  const series = GRADE.months.map((m) => ({ name: m.name, تولید: m.total, B: m.b }));
+  const top = GRADE.models.filter((m) => m.b > 0).slice(0, 6);
 
   return (
     <div>
-      <PageHeader kicker="میز فرمان گارانتی" title="خلاصه خدمات پس از فروش">
+      <PageHeader kicker="میز فرمان کیفیت" title="خلاصه گرید محصول">
         <p className="max-w-sm text-xs leading-relaxed text-fg-muted">
-          {COMPANY.legal} · {month === ALL_MONTHS ? COMPANY.periodLabel : formatMonth(month)} ·{" "}
-          {faNum(rows.length, 0)} رکورد تعمیر
+          نرخ گرید B برابر است با تعداد B تقسیم بر کل تولید ثبت‌شده. اعداد عیناً از فایل مدیریتی شش‌ماهه است.
         </p>
       </PageHeader>
 
-      <MonthRail months={months} selected={month} onSelect={setMonth} />
-
-      <section className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <section className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+        <KpiCard label="کل محصولات" value={num(byLabel["کل محصولات ثبت‌شده"]?.value ?? 0)} hint={byLabel["کل محصولات ثبت‌شده"]?.note} />
+        <KpiCard label="گرید B" value={num(byLabel["تعداد محصولات گرید B"]?.value ?? 0)} hint={byLabel["تعداد محصولات گرید B"]?.note} />
+        <KpiCard label="نرخ کلی گرید B" value={num(byLabel["نرخ کلی گرید B"]?.value ?? 0)} hint={`${num(byLabel["تعداد مدل‌های موجود"]?.value ?? 0)} مدل`} />
         <KpiCard
-          label="کل مراجعات"
-          value={faNum(k.visits, 0)}
-          delta={showDelta ? k.visitDelta : undefined}
-          hint={`${faNum(k.products, 0)} نوع دستگاه / ${faNum(k.models, 0)} مدل`}
+          label="بیشترین B"
+          value={String(byLabel["مدل با بیشترین تعداد B"]?.value ?? "—").split(" - ")[0]!}
+          hint={`${byLabel["مدل با بیشترین تعداد B"]?.note ?? ""} · اوج ماه: ${byLabel["ماه با بیشترین نرخ گرید B"]?.value ?? "—"}`}
         />
-        <KpiCard
-          label="مراجعه تکراری"
-          value={faNum(k.repeats, 0)}
-          hint={`سهم ${formatPctPlain(k.repeatShare, 0)} از کل`}
-        />
-        <KpiCard
-          label="پرتکرارترین دستگاه"
-          value={topProduct?.name ?? "—"}
-          hint={topProduct ? `${faNum(topProduct.count, 0)} مورد — ${formatPctPlain(topProduct.share, 0)}` : undefined}
-        />
-        <KpiCard
-          label="علت غالب"
-          value={topCause ? topCause.name.split(" - ")[0]! : "—"}
-          hint={topCause ? `${faNum(topCause.count, 0)} مورد — میانگین ${faNum(topCause.avgAge, 1)} ماه` : undefined}
-        />
-      </section>
-
-      <section className="mt-5 grid gap-3 lg:grid-cols-2">
-        {insights.map((ins) => (
-          <article
-            key={ins.title}
-            className="rounded-lg bg-bg-elevated p-4 shadow-[var(--shadow-border)]"
-          >
-            <div className="mb-2 flex items-center gap-2">
-              <Badge
-                tone={
-                  ins.tone === "good"
-                    ? "good"
-                    : ins.tone === "bad"
-                      ? "bad"
-                      : ins.tone === "warn"
-                        ? "warn"
-                        : "muted"
-                }
-              >
-                {ins.tone === "good"
-                  ? "مثبت"
-                  : ins.tone === "bad"
-                    ? "هشدار"
-                    : ins.tone === "warn"
-                      ? "توجه"
-                      : "یادداشت"}
-              </Badge>
-              <h2 className="text-sm font-medium">{ins.title}</h2>
-            </div>
-            <p className="text-sm leading-7 text-fg-muted">{ins.body}</p>
-          </article>
-        ))}
       </section>
 
       <section className="mt-5 grid gap-3 xl:grid-cols-5">
         <Card className="rounded-lg p-4 xl:col-span-3">
           <CardHeader>
             <div>
-              <CardTitle>روند ماهانه مراجعات</CardTitle>
-              <CardHint>تعداد پذیرش در هر ماه شمسی</CardHint>
+              <CardTitle>تولید و گرید B در ماه</CardTitle>
+              <CardHint>کمترین نرخ: {String(byLabel["ماه با کمترین نرخ گرید B"]?.value ?? "—")} · بیشترین نرخ: {String(byLabel["ماه با بیشترین نرخ گرید B"]?.value ?? "—")}</CardHint>
             </div>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/months">روند</Link>
+            </Button>
           </CardHeader>
           <ClientChart>
             <div className="h-[260px] w-full" dir="ltr">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={series}>
                   <CartesianGrid stroke={CHART.grid} vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tickFormatter={formatMonthShort}
-                    tick={{ fill: CHART.tick, fontSize: 11 }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis tick={{ fill: CHART.tick, fontSize: 11 }} axisLine={false} tickLine={false} width={28} />
-                  <Tooltip
-                    contentStyle={tooltipStyle}
-                    formatter={(v, name) => [
-                      faNum(Number(v), 0),
-                      name === "visits" ? "مراجعه" : "تکراری",
-                    ]}
-                    labelFormatter={(l) => formatMonth(String(l))}
-                  />
-                  <Bar dataKey="visits" fill={CHART[1]} radius={[3, 3, 0, 0]} />
+                  <XAxis dataKey="name" tick={{ fill: CHART.tick, fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: CHART.tick, fontSize: 11 }} axisLine={false} tickLine={false} width={36} />
+                  <Tooltip contentStyle={tooltipStyle} formatter={(v, name) => [faNum(Number(v), 0), String(name)]} />
+                  <Bar dataKey="تولید" fill={CHART[2]} radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="B" fill={CHART[4]} radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -150,23 +70,55 @@ function Home() {
         </Card>
         <Card className="rounded-lg p-4 xl:col-span-2">
           <CardHeader>
-            <CardTitle>توزیع دستگاه</CardTitle>
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/devices">جزئیات</Link>
-            </Button>
+            <CardTitle>خانواده محصول</CardTitle>
           </CardHeader>
-          <RankTable rows={products} nameLabel="دستگاه" />
+          <ul className="space-y-3">
+            {GRADE.families.map((f) => (
+              <li key={f.name}>
+                <div className="flex items-baseline justify-between gap-2 text-sm">
+                  <span>{f.name}</span>
+                  <span className="tabular text-fg-muted">{faNum(f.b, 0)} B · {formatRate(f.rate)}</span>
+                </div>
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bg-subtle">
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(6, f.share * 100)}%` }} />
+                </div>
+              </li>
+            ))}
+          </ul>
         </Card>
       </section>
 
       <Card className="mt-5 rounded-lg p-4">
         <CardHeader>
-          <CardTitle>علت‌های پرتکرار</CardTitle>
+          <CardTitle>مدل‌های دارای گرید B</CardTitle>
           <Button asChild variant="ghost" size="sm">
-            <Link to="/causes">همه علت‌ها</Link>
+            <Link to="/models">همه مدل‌ها</Link>
           </Button>
         </CardHeader>
-        <RankTable rows={causes} nameLabel="دسته علت" />
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[36rem] text-sm">
+            <thead className="text-xs text-fg-muted">
+              <tr>
+                <th className="pb-2 text-right font-medium">مدل</th>
+                <th className="pb-2 text-left font-medium">تولید</th>
+                <th className="pb-2 text-left font-medium">B</th>
+                <th className="pb-2 text-left font-medium">نرخ</th>
+                <th className="pb-2 text-left font-medium">سهم از B</th>
+              </tr>
+            </thead>
+            <tbody>
+              {top.map((m) => (
+                <tr key={m.code} className="border-t border-border">
+                  <td className="py-2.5">{m.name}</td>
+                  <td className="py-2.5 text-left tabular">{faNum(m.total, 0)}</td>
+                  <td className="py-2.5 text-left tabular">{faNum(m.b, 0)}</td>
+                  <td className="py-2.5 text-left tabular">{formatRate(m.rate)}</td>
+                  <td className="py-2.5 text-left tabular">{formatRate(m.share, 1)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Card>
     </div>
   );

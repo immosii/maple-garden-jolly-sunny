@@ -9,7 +9,7 @@ export function AppErrorComponent({ error }: ErrorComponentProps) {
       </span>
       <h1 className="text-lg font-medium">خطایی رخ داد</h1>
       <p className="max-w-md text-sm break-words text-fg-muted">
-        {error.message || "یک خطای پیش‌بینی‌نشده رخ داد. صفحه را دوباره بارگذاری کنید."}
+        {(error instanceof Error ? error.message : "") || "یک خطای پیش‌بینی‌نشده رخ داد. صفحه را دوباره بارگذاری کنید."}
       </p>
     </main>
   );

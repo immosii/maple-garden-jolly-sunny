@@ -7,7 +7,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <div className="px-4 pt-5 pb-4">
         <p className="text-[11px] tracking-[0.18em] text-fg-subtle">RASAD DESK</p>
         <p className="mt-1 font-display text-2xl font-medium leading-none tracking-tight">رصد</p>
-        <p className="mt-2 text-xs text-fg-muted">خدمات پس از فروش آرتا</p>
+        <p className="mt-2 text-xs text-fg-muted">گرید محصول · شش‌ماهه اول ۱۴۰۵</p>
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-2">
         {NAV.map((item) => (

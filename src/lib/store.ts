@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { monthsOf } from "@/lib/analytics";
-import { COMPANY, SEED_RECORDS } from "@/lib/company";
 import { prevMonth } from "@/lib/jalali";
 import { ALL_MONTHS, type DataSource, type GlobalFilters, type ImportLog, type ServiceRow } from "@/lib/types";
 
@@ -41,14 +40,14 @@ function persist(part: Persisted) {
 
 export const useReportStore = create<ReportState>((set, get) => ({
   ready: false,
-  rows: SEED_RECORDS,
+  rows: [],
   source: "seed",
-  fileName: "خدمات_پس_از_فروش_آرتا.xlsx",
+  fileName: null,
   lastImportAt: null,
   importLog: [],
   selectedMonth: ALL_MONTHS,
   filters: { product: null, cause: null, model: null },
-  company: COMPANY.name,
+  company: "آرتا",
   hydrate: () => {
     if (get().ready) return;
     try {
@@ -107,7 +106,7 @@ export const useReportStore = create<ReportState>((set, get) => ({
   },
   resetSeed: () => {
     const next: Persisted = {
-      rows: SEED_RECORDS,
+      rows: [],
       source: "seed",
       fileName: "خدمات_پس_از_فروش_آرتا.xlsx",
       lastImportAt: null,

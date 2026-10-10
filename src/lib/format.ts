@@ -9,36 +9,27 @@ export function faNum(n: number, digits = 0): string {
   );
 }
 
-export function formatMoney(n: number): string {
-  const abs = Math.abs(n);
-  const sign = n < 0 ? "−" : "";
-  if (abs >= 1_000_000_000) {
-    return `${sign}${faNum(abs / 1_000_000_000, 1)} میلیارد`;
-  }
-  if (abs >= 1_000_000) {
-    return `${sign}${faNum(abs / 1_000_000, 1)} میلیون`;
-  }
-  if (abs >= 1_000) {
-    return `${sign}${faNum(abs / 1_000, 0)} هزار`;
-  }
-  return `${sign}${faNum(abs, 0)}`;
+export function formatRate(ratio: number, digits = 2): string {
+  return `${faNum(ratio * 100, digits)}٪`;
 }
 
-export function formatMoneyFull(n: number): string {
-  return `${faNum(Math.round(n))} تومان`;
+export function formatPp(delta: number | null): string {
+  if (delta == null || Number.isNaN(delta)) return "—";
+  const pts = delta * 100;
+  const sign = pts > 0 ? "+" : pts < 0 ? "−" : "";
+  return `${sign}${faNum(Math.abs(pts), 2)} واحد`;
 }
 
-export function formatPct(n: number, digits = 1): string {
-  const sign = n > 0 ? "+" : n < 0 ? "−" : "";
-  return `${sign}${faNum(Math.abs(n), digits)}٪`;
+export function formatPct(delta: number): string {
+  const sign = delta > 0 ? "+" : delta < 0 ? "−" : "";
+  return `${sign}${faNum(Math.abs(delta), 1)}٪`;
 }
 
-export function formatPctPlain(n: number, digits = 1): string {
+export function formatPctPlain(n: number, digits = 0): string {
   return `${faNum(n, digits)}٪`;
 }
 
-export function deltaTone(n: number, invert = false): "up" | "down" | "flat" {
-  const v = invert ? -n : n;
-  if (Math.abs(n) < 0.05) return "flat";
-  return v > 0 ? "up" : "down";
+export function deltaTone(delta: number, invert = false): "up" | "down" | "flat" {
+  if (Math.abs(delta) < 0.05) return "flat";
+  return (invert ? delta < 0 : delta > 0) ? "up" : "down";
 }
